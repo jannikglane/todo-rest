@@ -1,0 +1,208 @@
+openapi: '3.0.2'
+info:
+  title: TODO-List API
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /todo-list/{listId}:
+    get:
+      description: Liefert alle Einträge einer Todo-Liste zurück.
+      parameters:
+        - in: path
+          required: true
+          name: listId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOfEntries'
+        '404':
+          description: ID nicht gefunden
+    delete:
+      description: Löscht eine komplette Todo-Liste mit allen Einträgen
+      parameters:
+        - in: path
+          required: true
+          name: listId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Liste gelöscht
+        '404':
+          description: ID nicht gefunden
+        '500':
+          description: Unerwarteter Fehler
+    patch:
+      description: Aktualisiert den Namen einer bestehenden Todo-Liste
+      parameters:
+        - in: path
+          required: true
+          name: listId
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: JSON-Object mit dem neuen Namen der Liste
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Name wurde angepasste
+        '404':
+          description: ID nicht gefunden
+        '500':
+          description: Unerwarteter Fehler
+  /todo-list:
+    get:
+      description: Liefert eine Liste aller Todo-Listen zurück.
+      responses:
+        '200':
+          description: Liste aller vorhandenen Liste
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOfLists'
+    post:
+      description: Fügt eine neue Todo-Liste hinzu
+      requestBody:
+        description: JSON-Object mit Namen der Liste
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewListDto'
+      responses:
+        '200':
+          description: Neue Liste angelegt
+        '500':
+          description: Unerwarteter Fehler
+  /todo-list/{listId}/entry:
+    post:
+      description: Fügt einen Eintrag zu einer bestehenden Todo-Liste hinzu
+      parameters:
+        - in: path
+          required: true
+          name: listId
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: JSON-Object mit den Daten den Eintrags
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEntryDto'
+      responses:
+        '200':
+          description: Eintrag wurde angelegt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewEntryDto'
+        '500':
+          description: Unerwarteter Fehler
+  /entry/{entryId}:
+    patch:
+      description: Aktualisiert einen bestehenden Eintrag
+      parameters:
+        - in: path
+          required: true
+          name: entryId
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: JSON-Object mit den Daten den Eintrags
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEntryDto'
+      responses:
+        '200':
+          description: Eintrag wurde angepasste
+        '404':
+          description: Id wurde nicht gefunden
+        '500':
+          description: Unerwarteter Fehler
+    delete:
+      description: Löscht einen bestehenden Eintrag
+      parameters:
+        - in: path
+          required: true
+          name: entryId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Eintrag wurde gelöscht
+        '404':
+          description: Id wurde nicht gefunden
+        '500':
+          description: Unerwarteter Fehler
+  /search:
+    description: Sucht einen Eintrag anhand des Filters
+
+components:
+  schemas:
+    List:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        entries:
+          type: array
+          items:
+            type: string
+            format: uuid
+    NewListDto:
+      type: object
+      properties:
+        name:
+          type: string
+    Entry:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        user_id:
+          type: string
+          format: uuid
+        list_id:
+          type: string
+          format: uuid
+    NewEntryDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    ListOfLists:
+      type: array
+      items:
+        $ref: '#/components/schemas/List'
+    ListOfEntries:
+      type: array
+      items:
+        $ref: '#/components/schemas/Entry'
