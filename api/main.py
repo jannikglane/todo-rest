@@ -4,7 +4,6 @@ import json
 from models.list import List, NewListDto
 from models.entry import Entry, NewEntryDto
 
-
 class CustomEncoder(json.JSONEncoder):
     def default(self, o):
         return o.__dict__
@@ -27,9 +26,9 @@ todo_2 = Entry('cdd8b065-b318-40d3-8628-87ec2bb5eb6a',
 list_store = [todo_list_1, todo_list_2]
 entry_store = [todo_1, todo_2]
 
-f = open("data.json", "r")
-data_store = json.load(f)
-f.close()
+# f = open("data.json", "r")
+# data_store = json.load(f)
+# f.close()
 
 @app.route('/todo-list', methods=['GET', 'POST'])
 def get_all_lists():
@@ -38,7 +37,7 @@ def get_all_lists():
             return write_json(list_store)
         case 'POST':
             data = request.get_json()
-            new_list = List(str(uuid.uuid4()), data['name'], [])
+            new_list = List(str(uuid.uuid4()), data['name'])
             list_store.append(new_list)
             return write_json(new_list)
 
@@ -66,6 +65,7 @@ def get_list(list_id):
         case 'PATCH':
             data = request.get_json()
             selected_list.name = data['name']
+            return write_json(selected_list)
         case _:
             return '', 500
     
@@ -84,7 +84,6 @@ def post_new_entry(list_id):
 
 @app.route('/entry/<entry_id>', methods=['PATCH', 'DELETE'])
 def update_entry(entry_id):
-    data = request.get_json()
     
     entry = None
     for l in entry_store:
@@ -96,14 +95,16 @@ def update_entry(entry_id):
     
     match request.method:
         case 'PATCH':
+            data = request.get_json()
             entry.name = data['name']
             entry.description = data['description']
         case 'DELETE':
             entry_store.remove(entry)
+            return write_json({'deleted': True}), 200
         case _:
             return '', 500
             
-    return '', 200
+    return write_json(entry), 200
 
 
 if __name__ == '__main__':
