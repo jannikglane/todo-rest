@@ -1,0 +1,28 @@
+{
+    "lists": [
+        {
+            "id": "f5ab07ac-e375-4d50-be64-87ec2bb5eb6a",
+            "name": "Liste Eins"
+        },
+        {
+            "id": "cdd8b065-b318-40d3-8628-cc2a96d10b0e",
+            "name": "Liste Zwei"
+        }
+    ],
+    "entries": [
+        {
+            "id": "f5ab07ac-e375-4d50-be64-cc2a96d10b0e",
+            "name": "Eintrag Eins",
+            "description": "Example Text One",
+            "user_id": "3c4dd692-6896-4d9e-b912-8868625760c9",
+            "list_id": "f5ab07ac-e375-4d50-be64-87ec2bb5eb6a"
+        },
+        {
+            "id": "cdd8b065-b318-40d3-8628-87ec2bb5eb6a",
+            "name": "Eintrag Zwei",
+            "description": "Example Text Two",
+            "user_id": "3c4dd692-6896-4d9e-b912-8868625760c9",
+            "list_id": "cdd8b065-b318-40d3-8628-cc2a96d10b0e"
+        }
+    ]
+}

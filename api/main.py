@@ -9,6 +9,8 @@ class CustomEncoder(json.JSONEncoder):
     def default(self, o):
         return o.__dict__
 
+def write_json(objectToJson):
+    return json.dumps(objectToJson, indent=4, cls=CustomEncoder)
 
 # initialisiere Flask-Server
 app = Flask(__name__)
@@ -25,10 +27,9 @@ todo_2 = Entry('cdd8b065-b318-40d3-8628-87ec2bb5eb6a',
 list_store = [todo_list_1, todo_list_2]
 entry_store = [todo_1, todo_2]
 
-
-def write_json(objectToJson):
-    return json.dumps(objectToJson, indent=4, cls=CustomEncoder)
-
+f = open("data.json", "r")
+data_store = json.load(f)
+f.close()
 
 @app.route('/todo-list', methods=['GET', 'POST'])
 def get_all_lists():

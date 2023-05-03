@@ -5,13 +5,15 @@ info:
 servers:
   - url: http://localhost:4200
 paths:
-  /todo-list/{listId}:
+  /todo-list/{list_id}:
     get:
       description: Liefert alle Einträge einer Todo-Liste zurück.
+      tags:
+        - /todo-list/{list_id}
       parameters:
         - in: path
           required: true
-          name: listId
+          name: list_id
           schema:
             type: string
             format: uuid
@@ -26,10 +28,12 @@ paths:
           description: ID nicht gefunden
     delete:
       description: Löscht eine komplette Todo-Liste mit allen Einträgen
+      tags:
+        - /todo-list/{list_id}
       parameters:
         - in: path
           required: true
-          name: listId
+          name: list_id
           schema:
             type: string
             format: uuid
@@ -42,10 +46,12 @@ paths:
           description: Unerwarteter Fehler
     patch:
       description: Aktualisiert den Namen einer bestehenden Todo-Liste
+      tags:
+        - /todo-list/{list_id}
       parameters:
         - in: path
           required: true
-          name: listId
+          name: list_id
           schema:
             type: string
             format: uuid
@@ -68,6 +74,8 @@ paths:
   /todo-list:
     get:
       description: Liefert eine Liste aller Todo-Listen zurück.
+      tags:
+        - /todo-list
       responses:
         '200':
           description: Liste aller vorhandenen Liste
@@ -77,6 +85,8 @@ paths:
                 $ref: '#/components/schemas/ListOfLists'
     post:
       description: Fügt eine neue Todo-Liste hinzu
+      tags:
+        - /todo-list
       requestBody:
         description: JSON-Object mit Namen der Liste
         content:
@@ -88,13 +98,15 @@ paths:
           description: Neue Liste angelegt
         '500':
           description: Unerwarteter Fehler
-  /todo-list/{listId}/entry:
+  /todo-list/{list_id}/entry:
     post:
       description: Fügt einen Eintrag zu einer bestehenden Todo-Liste hinzu
+      tags:
+        - /todo-list/{list_id}/entry
       parameters:
         - in: path
           required: true
-          name: listId
+          name: list_id
           schema:
             type: string
             format: uuid
@@ -113,13 +125,15 @@ paths:
                 $ref: '#/components/schemas/NewEntryDto'
         '500':
           description: Unerwarteter Fehler
-  /entry/{entryId}:
+  /entry/{entry_id}:
     patch:
       description: Aktualisiert einen bestehenden Eintrag
+      tags:
+        - /entry/{entry_id}
       parameters:
         - in: path
           required: true
-          name: entryId
+          name: entry_id
           schema:
             type: string
             format: uuid
@@ -138,10 +152,12 @@ paths:
           description: Unerwarteter Fehler
     delete:
       description: Löscht einen bestehenden Eintrag
+      tags:
+        - /entry/{entry_id}
       parameters:
         - in: path
           required: true
-          name: entryId
+          name: entry_id
           schema:
             type: string
             format: uuid
@@ -185,9 +201,6 @@ components:
           type: string
         description:
           type: string
-        user_id:
-          type: string
-          format: uuid
         list_id:
           type: string
           format: uuid
